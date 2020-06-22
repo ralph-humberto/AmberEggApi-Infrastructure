@@ -52,7 +52,7 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'scriptPath'
     scriptPath: './scripts/createaks.sh'
-    arguments: '$(resourceGroupName) $(resourceKubernetesName) 1 ''$(tags)'' $(appId) $(password) $(resourceVsubnetId)'
+    arguments: '$(resourceGroupName) $(resourceKubernetesName) ''$(tags)'' $(resourceGroupLocation) $(subscription) $(appId) $(password) $(resourceVnetId) $(resourceVsubnetId)'
   displayName: 'Create the kubernetes service'
 - task: AzureCLI@2
   inputs:

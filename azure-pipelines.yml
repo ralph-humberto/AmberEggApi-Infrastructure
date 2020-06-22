@@ -48,4 +48,3 @@ steps:
     arguments: '$(resourceGroupName) $(resourceContainerRegistryName) ''$(tags)'''
   displayName: 'Create the container registry'
 
-

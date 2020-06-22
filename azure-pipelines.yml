@@ -7,13 +7,52 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
+
+variables:
+  resourceGroupName: '$(resourceGroupNamePreffix)-$(env)-$(count)'
+  resourceKubernetesName: '$(resourceKubernetesNamePreffix)-$(env)-$(count)'
+  resourceApiManagementName: '$(resourceApiManagementNamePreffix)-$(env)-$(count)'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/creategroup.sh'
+    arguments: '$(resourceGroupName) $(resourceGroupLocation) ''$(tags)'''
+  displayName: 'Create the resource group'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/createvnet.sh'
+    arguments: '$(resourceGroupName) $(resourceVnetId) $(resourceVsubnetId) ''$(tags)'''
+  displayName: 'Create the vnet to kubernetes'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/createaks.sh'
+    arguments: '$(resourceGroupName) $(resourceKubernetesName) 1 ''$(tags)'' $(appId) $(password) $(resourceVsubnetId)'
+  displayName: 'Create the kubernetes service'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/createacr.sh'
+    arguments: '$(resourceGroupName) $(resourceContainerRegistryName) ''$(tags)'''
+  displayName: 'Create the container registry'
+- task: AzurePowerShell@5
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    ScriptType: 'FilePath'
+    ScriptPath: './scripts/createapim.ps1'
+    ScriptArguments: '$(subscription) $(resourceGroupName) $(resourceVnetId) $(resourceVsubnetId) $(resourceApiManagementName) $(apiManagementPublisherEmail) ''$(apiManagementPublisherName)'' ''$(tags)'''
+    azurePowerShellVersion: 'LatestVersion'
+  displayName: 'Create the API Management'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'

@@ -10,6 +10,21 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
+  # Preffix Resources
+  resourceApiManagementNamePreffix: 'apim-'
+  resourceKubernetesNamePreffix: 'aks'
+  resourceGroupNamePreffix: 'rs-gp'
+
+  # Commons constants
+  count: '001'
+  env: 'dev'
+  resourceVsubnetId: 'aks-subnet'
+  tags: 'AmberEggApi Dev KeepOnlineOnlyWorkTime'
+  resourceVnetId: 'aks-vnet'
+  resourceGroupLocation: 'eastus'
+
+  # Resource Name
+  resourceContainerRegistryName: 'AcrRrDevAmberEgg'
   resourceGroupName: '$(resourceGroupNamePreffix)-$(env)-$(count)'
   resourceKubernetesName: '$(resourceKubernetesNamePreffix)-$(env)-$(count)'
   resourceApiManagementName: '$(resourceApiManagementNamePreffix)-$(env)-$(count)'
@@ -17,7 +32,7 @@ variables:
 steps:
 - task: AzureCLI@2
   inputs:
-    azureSubscription: '$(subscriptionName)'
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
     scriptType: 'bash'
     scriptLocation: 'scriptPath'
     scriptPath: './scripts/creategroup.sh'
@@ -25,7 +40,7 @@ steps:
   displayName: 'Create the resource group'
 - task: AzureCLI@2
   inputs:
-    azureSubscription: '$(subscriptionName)'
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
     scriptType: 'bash'
     scriptLocation: 'scriptPath'
     scriptPath: './scripts/createvnet.sh'
@@ -33,10 +48,17 @@ steps:
   displayName: 'Create the vnet to kubernetes'
 - task: AzureCLI@2
   inputs:
-    azureSubscription: '$(subscriptionName)'
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/createaks.sh'
+    arguments: '$(resourceGroupName) $(resourceKubernetesName) 1 ''$(tags)'' $(appId) $(password) $(resourceVsubnetId)'
+  displayName: 'Create the kubernetes service'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
     scriptType: 'bash'
     scriptLocation: 'scriptPath'
     scriptPath: './scripts/createacr.sh'
     arguments: '$(resourceGroupName) $(resourceContainerRegistryName) ''$(tags)'''
   displayName: 'Create the container registry'
-

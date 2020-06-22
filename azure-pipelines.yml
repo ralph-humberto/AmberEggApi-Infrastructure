@@ -47,12 +47,5 @@ steps:
     scriptPath: './scripts/createacr.sh'
     arguments: '$(resourceGroupName) $(resourceContainerRegistryName) ''$(tags)'''
   displayName: 'Create the container registry'
-- task: AzurePowerShell@5
-  inputs:
-    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
-    ScriptType: 'FilePath'
-    ScriptPath: './scripts/createapim.ps1'
-    ScriptArguments: '$(subscription) $(resourceGroupName) $(resourceVnetId) $(resourceVsubnetId) $(resourceApiManagementName) $(apiManagementPublisherEmail) ''$(apiManagementPublisherName)'' ''$(tags)'''
-    azurePowerShellVersion: 'LatestVersion'
-  displayName: 'Create the API Management'
+
 

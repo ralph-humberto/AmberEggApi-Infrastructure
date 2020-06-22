@@ -29,7 +29,7 @@ if [ ${#kuberneteServiceCheck} -lt 3 ]; then
         --service-cidr 10.0.0.0/16 \
         --name $resourceKubernetesName --node-count 1 \
         --enable-addons monitoring --generate-ssh-keys \
-        --tags $resourceTags --network-plugin azure --enable-managed-identity \
+        --tags $resourceTags --network-plugin kubenet --enable-managed-identity \
 		--vnet-subnet-id "/subscriptions/$subscription/resourceGroups/$resourceGroupName/providers/Microsoft.Network/virtualNetworks/$vnetId/subnets/$vnetSubnetId" \
         --service-principal $appId --client-secret $password
     echo "Resource kubernetes created successfully"

@@ -13,6 +13,8 @@ password=$7
 vnetId=$8
 vnetSubnetId=$9
 
+echo "/subscriptions/$subscription/resourceGroups/$resourceGroupName/providers/Microsoft.Network/virtualNetworks/$vnetId/subnets/$vnetSubnetId"
+
 echo "$kuberneteServiceName: check if exists"
 kuberneteServiceCheck=`az aks list --query "[?name=='$resourceKubernetesName']"`
 
@@ -32,10 +34,3 @@ if [ ${#kuberneteServiceCheck} -lt 3 ]; then
 else
     echo "$kuberneteServiceName: already exists"
 fi
-
-Serviço CIDR
-10.0.0.0/16
-IP do serviço DNS
-10.0.0.10
-Ponte Docker CIDR
-172.17.0.1/16

@@ -1,0 +1,57 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  resourceGroupName: '$(resourceGroupNamePreffix)-$(env)-$(count)'
+  resourceKubernetesName: '$(resourceKubernetesNamePreffix)-$(env)-$(count)'
+  resourceApiManagementName: '$(resourceApiManagementNamePreffix)-$(env)-$(count)'
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/creategroup.sh'
+    arguments: '$(resourceGroupName) $(resourceGroupLocation) ''$(tags)'''
+  displayName: 'Create the resource group'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/createvnet.sh'
+    arguments: '$(resourceGroupName) $(resourceVnetId) $(resourceVsubnetId) ''$(tags)'''
+  displayName: 'Create the vnet to kubernetes'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/createaks.sh'
+    arguments: '$(resourceGroupName) $(resourceKubernetesName) 1 ''$(tags)'' $(appId) $(password) $(resourceVsubnetId)'
+  displayName: 'Create the kubernetes service'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    scriptType: 'bash'
+    scriptLocation: 'scriptPath'
+    scriptPath: './scripts/createacr.sh'
+    arguments: '$(resourceGroupName) $(resourceContainerRegistryName) ''$(tags)'''
+  displayName: 'Create the container registry'
+- task: AzurePowerShell@5
+  inputs:
+    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    ScriptType: 'FilePath'
+    ScriptPath: './scripts/createapim.ps1'
+    ScriptArguments: '$(subscription) $(resourceGroupName) $(resourceVnetId) $(resourceVsubnetId) $(resourceApiManagementName) $(apiManagementPublisherEmail) ''$(apiManagementPublisherName)'' ''$(tags)'''
+    azurePowerShellVersion: 'LatestVersion'
+  displayName: 'Create the API Management'

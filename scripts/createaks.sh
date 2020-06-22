@@ -21,8 +21,10 @@ kuberneteServiceCheck=`az aks list --query "[?name=='$resourceKubernetesName']"`
 if [ ${#kuberneteServiceCheck} -lt 3 ]; then
     echo "Creating resource-kubernetes named $resourceKubernetesName with tags $resourceTags"
     az aks create --resource-group $resourceGroupName \
-		--location eastus \
+		--location $resourceLocation \
 		--docker-bridge-address 172.17.0.1/16 \
+		--load-balancer-sku standard \
+		--enable-private-cluster \
         --dns-service-ip 10.0.0.10 \
         --service-cidr 10.0.0.0/16 \
         --name $resourceKubernetesName --node-count 1 \
@@ -34,3 +36,6 @@ if [ ${#kuberneteServiceCheck} -lt 3 ]; then
 else
     echo "$kuberneteServiceName: already exists"
 fi
+
+
+    

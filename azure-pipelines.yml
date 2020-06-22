@@ -17,7 +17,7 @@ variables:
 steps:
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    azureSubscription: '$(subscription)'
     scriptType: 'bash'
     scriptLocation: 'scriptPath'
     scriptPath: './scripts/creategroup.sh'
@@ -25,7 +25,7 @@ steps:
   displayName: 'Create the resource group'
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    azureSubscription: '$(subscription)'
     scriptType: 'bash'
     scriptLocation: 'scriptPath'
     scriptPath: './scripts/createvnet.sh'
@@ -33,15 +33,7 @@ steps:
   displayName: 'Create the vnet to kubernetes'
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
-    scriptType: 'bash'
-    scriptLocation: 'scriptPath'
-    scriptPath: './scripts/createaks.sh'
-    arguments: '$(resourceGroupName) $(resourceKubernetesName) 1 ''$(tags)'' $(appId) $(password) $(resourceVsubnetId)'
-  displayName: 'Create the kubernetes service'
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'Avaliação Gratuita(18441764-decb-42f5-9121-06d30147bbbe)'
+    azureSubscription: '$(subscription)'
     scriptType: 'bash'
     scriptLocation: 'scriptPath'
     scriptPath: './scripts/createacr.sh'

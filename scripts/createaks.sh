@@ -28,7 +28,7 @@ if [ ${#kuberneteServiceCheck} -lt 3 ]; then
 		--location eastus \
         --name $resourceKubernetesName --node-count $resourceCount \
         --enable-addons monitoring --generate-ssh-keys \
-        --tags $resourceTags --network-plugin azure --vnet-subnet-id $vnetSubnetId \
+        --tags $resourceTags --network-plugin azure \
         --service-principal $appId --client-secret $password
     echo "Resource kubernetes created successfully"
 else

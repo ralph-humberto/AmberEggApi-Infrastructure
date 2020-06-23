@@ -13,8 +13,6 @@ password=$7
 vnetId=$8
 vnetSubnetId=$9
 
-echo "/subscriptions/$subscription/resourceGroups/$resourceGroupName/providers/Microsoft.Network/virtualNetworks/$vnetId/subnets/$vnetSubnetId"
-
 echo "$kuberneteServiceName: check if exists"
 kuberneteServiceCheck=`az aks list --query "[?name=='$resourceKubernetesName']"`
 
@@ -30,8 +28,9 @@ if [ ${#kuberneteServiceCheck} -lt 3 ]; then
         --name $resourceKubernetesName --node-count 1 \
         --enable-addons monitoring --generate-ssh-keys \
         --tags $resourceTags --network-plugin kubenet --enable-managed-identity \
-		--vnet-subnet-id "/subscriptions/$subscription/resourceGroups/$resourceGroupName/providers/Microsoft.Network/virtualNetworks/$vnetId/subnets/$vnetSubnetId" \
         --service-principal $appId --client-secret $password
+		#--vnet-subnet-id "/subscriptions/$subscription/resourceGroups/$resourceGroupName/providers/Microsoft.Network/virtualNetworks/$vnetId/subnets/$vnetSubnetId" \
+
     echo "Resource kubernetes created successfully"
 else
     echo "$kuberneteServiceName: already exists"

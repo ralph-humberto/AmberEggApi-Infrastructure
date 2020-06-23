@@ -70,3 +70,4 @@ steps:
     ScriptArguments: '$(subscription) $(resourceGroupName) $(resourceVnetId) $(resourceVsubnetId) $(resourceApiManagementName) $(apiManagementPublisherEmail) ''$(apiManagementPublisherName)'' ''$(tags)'''
     azurePowerShellVersion: 'LatestVersion'
   displayName: 'Create the API Management'
+  

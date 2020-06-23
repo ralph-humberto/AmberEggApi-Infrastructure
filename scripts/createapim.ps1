@@ -1,7 +1,10 @@
 function ArrayToHash($a)
 {
     $hash = [ordered]@{}
-    $a | foreach { $hash[$_] = "" }
+    $a | foreach { 
+		write-host "key: $_"
+		$hash.Add("$_", "") 
+	}
     return $hash
 }
 

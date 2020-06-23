@@ -1,6 +1,6 @@
 function ArrayToHash($a)
 {
-    $hash = [ordered]@{}
+    $hash = new-object 'System.Collections.Generic.Dictionary[[string],[string]]'
     $a | foreach { 
 		write-host "key: $_"
 		$hash.Add("$_", "") 

@@ -17,10 +17,10 @@ if [ ${#resourceVnetCheck} -lt 3 ]; then
 		--subnet-name $resourceSubnetName --subnet-prefix 10.240.0.0/16 \
 		--tags $resourceTags
 		
-	#az network vnet subnet create --address-prefixes 10.0.0.0/29 \
-    #    --name api-management-subnet \
-    #    --resource-group $resourceGroupName \
-    #    --vnet-name $resourceVnetName \
+	az network vnet subnet create --address-prefixes 10.0.0.0/29 \
+        --name api-management-subnet \
+        --resource-group $resourceGroupName \
+        --vnet-name $resourceVnetName \
 	#
 	#az network vnet subnet create --address-prefixes 10.0.1.0/24 \
     #    --name api-ingress-subnet \

@@ -1,6 +1,6 @@
 function ArrayToHash($a)
 {
-    $hash = @{}
+    $hash = [ordered]@{}
     $a | foreach { $hash[$_] = "" }
     return $hash
 }
@@ -22,7 +22,7 @@ try {
 Catch {
 	write-host "Creating api management $apiManagementName"
     $virtualNetwork = New-AzApiManagementVirtualNetwork -SubnetResourceId "/subscriptions/$subscription/resourceGroups/$resourceGroupName/providers/Microsoft.Network/virtualNetworks/$resourceVnetName/subnets/api-management-subnet"
-    New-AzApiManagement -ResourceGroupName $resourceGroupName -Location "East US" -Name $apiManagementName -Organization $apiManagementName -AdminEmail $apiManagementPublisherEmail -Sku "Developer" -VpnType "External" -VirtualNetwork $virtualNetwork
+    New-AzApiManagement -ResourceGroupName $resourceGroupName -Location "East US" -Name $apiManagementName -Tags $resourceTags -Organization $apiManagementName -AdminEmail $apiManagementPublisherEmail -Sku "Developer" -VpnType "External" -VirtualNetwork $virtualNetwork
 }
 
 
